@@ -1,6 +1,8 @@
 package net.shawnklein.android.nerdlauncher;
 
+import android.app.LauncherActivity;
 import android.content.Intent;
+import android.content.pm.ActivityInfo;
 import android.content.pm.PackageManager;
 import android.content.pm.ResolveInfo;
 import android.os.Bundle;
@@ -51,5 +53,18 @@ public class NerdLauncherFragment extends ListFragment {
                 return v;
             }
         };
+    }
+
+    @Override
+    public void onListItemClick(ListItem l, View v, int position, long id) {
+        ResolveInfo resolveInfo = (ResolveInfo)l.getAdapter().getItem(position);
+        ActivityInfo activityInfo = resolveInfo.activityInfo;
+
+        if (activityInfo == null) return;
+
+        Intent i = new Intent(Intent.ACTION_MAIN);
+        i.setClassName(activityInfo.applicationInfo.packageName, activityInfo.name);
+
+        startActivity(i);
     }
 }
